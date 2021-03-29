@@ -1,0 +1,152 @@
+---
+title: "Nyttige pakker og funksjoner"
+author: "Lars Bauger"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document: 
+    toc: yes
+    toc_depth: 2
+---
+```{r setup, include=FALSE}
+# Register an inline hook:
+knitr::knit_hooks$set(inline = function(x) {
+  x <- sprintf("%1.2f", x)
+  paste(x, collapse = ", ")
+})
+```
+```{r}
+library(naniar)
+library(tidyverse)
+```
+
+
+
+# Nyttige ressurser for Rmarkdown 
+Som et supplement til David Dalpiaz sin bok [R for statistical Learning](https://daviddalpiaz.github.io/r4sl/index.html) så er det lagt ved en kort youtube [spilleliste](https://www.youtube.com/playlist?list=PLBgxzZMu3GpNgd07DwmS-2odHtMO6MWGH) for basic rmarkdown tips og triks. 
+
+* En tabell generator for å gjøre det enklere å få fine tabeller. Bruk [denne](https://www.tablesgenerator.com/markdown_tables) lenken for å generere tabell. et eksempel på en 5x3 tabell under
+
+| Id 	| Alder 	| Kjønn 	| Karakter 	| Fulgt undervisning 	|
+|-	|-	|-	|-	|-	|
+| 1 	| 20 	| Kvinne 	| B 	| Digitalt 	|
+| 2 	| 22 	| Mann 	| C 	| Elektronisk 	|
+| 3 	| 35 	| Kvinne 	| E 	| Hybrid 	|
+
+For å introdusere en r chunk kan man bruke hurtigtastene `ctrl`+`alt`+ `i`. Under er det et kort seksempl på at jeg har lagd to variabler (vektorer): variabel x har verdiene fra 1-10 og y er har verdiene x ganger 3
+```{r}
+x = 1:10
+y = x * 3
+x + y
+```
+
+```{r echo=FALSE}
+hist(y)
+```
+
+```{r message=FALSE, warning=FALSE}
+z = c(1,1,2,3,5,8)
+z + x
+```
+
+Hvis man ikke vil ha med advarsler eller meldinger så kan man redigere dette i selve r chunken. Dette kan gjøres ved å spesifisere det manuelt i koden, evt. å endre oppsettet på høyre side i selve chunken. man kan også velge å kunne vise output (echo=FALSE) eller å vise koden og output. for å justere figurstørrelsen i dokumentet kan man spesifisere bredden og høyden ved å inkludere i chunken `fig.width = 4`, `fig.height = 2.5``
+
+
+# Nyttige pakker og funksjoner for å utforske data {#test}
+* [**`visdat`**](https://cran.r-project.org/web/packages/visdat/index.html) er en pakke som er fin for å få oversikt over et helt datasett slik at man kan oppdage eventuelle problemer og mangler ved det. De to vikigste funksjonene er `vis_dat` og `vis_miss`.
+  - `vis_dat` visualiserer hele datasettet på en gang og gir informasjon om hva slags type variabel vi har (class) samt hvovidt det er noe som er missing data. under er denne funksjonen brukt på `airquality` datasettet som ligger i r
+```{r echo=FALSE, fig.width = 4, fig.height = 2.5}
+visdat::vis_dat(airquality)
+```
+  - `vis_miss` gir en oppsummering av hvor mye av data som mangler for hver kolonne og totalt.et eksempel på dette med `airquality` datasettet er ser du under. 
+```{r echo=FALSE}
+visdat::vis_miss(airquality)
+```
+
+
+* **vroom**
+  + Når man jobber med store dataset, slik som NorLAG er, kan det være nyttig å heller bruke vroom pakken for å lese data, da den vistnok er ganske my raskere enn andre pakker for å lese inn csv data. Ikke super relevant for mitt bruk
+* [**skimr**](https://cran.r-project.org/web/packages/skimr/index.html)
+  + Gir god oppsummering av datset og variabler. Gir rask oversikt over type og antall om  variabler, antall obvservasjoner, gjennomsnitt, SD histogram osv
+
+* [**GGally**](https://cran.r-project.org/web/packages/GGally/index.html)
+  + til å utforske data visuelt - en utvidelse av ggplot2 som blant annet inneholder fantastisk funksjon som lager flere plots samtidig for å utforske dataene
+    - ggpairs
+    - kan brukes for å utforske norlag data når det skal presenteres
+* [**esquisse**](https://cran.r-project.org/web/packages/esquisse/index.html)
+  + EN shiny app for å lage ggplot2 figurer, men her er fordelen at man har visuelle "drag-and-drop" funksjoner for å utforske mulighetene, samtidig som man etter å ha prøvd seg frem får  koden for å reprodusere plot i markdown eller i script format.
+  ![illustrasjon](E:/OneDrive - USN/R projects/Learning R/img/illustrasjon_esquisse.jpg)
+* [**dlookr**](https://cran.r-project.org/web/packages/dlookr/index.html)
+  + A collection of tools that support data diagnosis, exploration, and transformation
+* [**brolgar**](https://cran.r-project.org/web/packages/brolgar/index.html)
+  + Provides a framework of tools to summarise, visualise, and explore longitudinal data.
+* [**arsenal**](https://cran.r-project.org/web/packages/arsenal/index.html)
+  + An Arsenal of 'R' functions for large-scale statistical summaries, which are streamlined to work within the latest reporting tools in 'R' and 'RStudio'
+  
+# Nyttige pakker for å endre, bearbeide og "rydde i dataene
+* [**tidylog**]()
+  + Enn pakke som gir oppsumemring av hva som har skjedd etter at man har gjort endringer i for eksemple dplyr (filter og select, etc)
+* [**scales**](https://www.rdocumentation.org/packages/scales/versions/0.4.1) 
+  + et verktøy for å skalere data slik at det både blir enklere å forstå datene og visualisere de. spesielt rescale funksjonene kan være nyttige for å normalisere og/eller standardisere datadataene [se mer om det her](https://www.pluralsight.com/guides/normalizing-data-r)
+  + [**caret package kan også være relevant for dette**]
+* [**janitor**](https://cran.r-project.org/web/packages/janitor/index.html)
+  + en pakke for å rydde opp i navn på variablene (kolonnene) i et datasett. janitor pakken med funksjonen clean_names() gjør navnene automatisk riktige 
+  
+# Tips og triks
+
+* For å velge ut (tilfeldig) en mindre del av dataene i datasettet kan bruke slice funksjonen `slice_sample` i dplyr pakken (en del av tidyverse). For å trekke ut et spesifikt antall tilfeldig antall rader (i eksemplet 30 rader) kan man bruke `slice_sample(n = 30)`. Dersom man ønsker å trekke ut tilfeldig prosent (i eksemplet 1 %) av datasettet kan man bruke `slice_sample(prop = 0.01)`
+## Deskriptive statistikk
+
+## Raske oversikter over datasettet
+* `summary()` funksjonen i grunnleggende r gir en oppsummering av de forskjellige variablene i datasettet (eller per variabel). informasjon som min og max, median, gjennomsnitt, kvartiler
+
+* `skimr` pakken sin `skim()` funksjon  som i tillegg til det somm summary gir også inkluderer et histogram og inkluderer informasjon om missing data. denne pakken passer også med tidyverse "språket" og dermed er det enkelt å bruke med dplyr funksjonene slik som gruppere resultatene med `group_by`, eller å filtrere dataene med `filter`, samt `select`.
+
+* `table1` pakken gir kort og visuelt fin presentasjon av statistikken i forhåndsvisningsfeltet (det blir et objekt) som kan lagres. Et eksempel på dette vises under med å bruke Iris datasettet.
+```{r echo=FALSE}
+table1::table1(~ Petal.Width + Sepal.Width | Species, data=iris)
+```
+
+### Mer detaljert beskrivende statistikk
+
+* `psych` pakken har masse funksjoner som er relevante når man ønsker deskriptiv statistikk. i bunn og grunn for du alt du trenger i `describe()` funksjonen med alt som nevnt ovenfor, pluss skewness og kurtosis. Dersom man bruker `describeBy()` kan man få denne statistikken fordelt på forskjellige gruppenivå. her er ikke resulateten i en egen output slik som i `table1` pakken. 
+
+```{r eval=FALSE, include=FALSE}
+psych::describeBy(iris, iris$Species) %>% 
+  print()
+```
+
+`pastecs` er en pakke med mulighet for å trekke ut mer inngående sjekker av datasettet, med nomralitetssjekk. en utfordring med veldig stygge outputs, men de kan eventuelt bearbeides nærmere. f.eks. vil det være nyttig å begrense antall desimaler til 3 ved å bruke
+
+`DescTools` er en pakke som inlkuderer oppsummerende statistikk samt produserer egne figurer (historgrammer, linjediagrammer, boxplots for hver enkelt variabel). 
+
+## utforske missing data
+
+Her kan det være en fordel å bruke dedikerte pakker slik som `naniar` pakken, en oversiktsartikkel til denne pakken er [**her**](https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html). 
+
+Hvis vi ser på figuren [visdat](#test) så viser det tydelig hvilke variabler som har såkallte missing. Når vi vet dette er det nyttig å utforske nærmere hvordan forholdet mellom disse variablene. Dette kan kanskje best gjøres ved å bruke `naniar` pakken og funksjonene der for å bruke i ggplot. et eksempel på dette ser vi under hvor `geom_miss_point` fra `naniar` pakken.
+```{r}
+ggplot(airquality, 
+       aes(x = Solar.R, 
+           y = Ozone)) + 
+  geom_miss_point()
+```
+for å vise missing data for hver variabel kan det være nyttig å bruke `gg_miss_var`
+```{r}
+gg_miss_var(airquality)
+```
+### tallfesting av missing data
+
+Det går også fint å bruke `naniar` pakken for å få beskrivende statistikk over missing data. For å¨få til dette må vi bruke `n_miss()` for å finne ut hvor mange tilfeller som mangler i datasettet, eller i hver variabel ved å bruke`datasett$variabel`. For å finne ut hvor mange komplette rader det er i datasettet kan vi bruke `n_complete()`.For å se hvor stor andel som er missing i datasettet eller per variabel så kan vi bruke enten prop_miss_case() eller `pct_miss_case()`. For en oversiktlig oversikt over hele datasettet kan vi få ved å bruke `miss_var_summary()`.  Eksempler med airquality datasettet vises under.
+
+```{r}
+
+n_miss(airquality)
+n_miss(airquality$Ozone)
+n_complete(airquality)
+n_complete(airquality$Ozone)
+miss_var_summary(airquality)
+```
+
+### erstatte missing data - Imputation
+Det er flere pakker som kan brukes for å erstatte missing data i r og det er en ganske enkel prosedyre. Det er derfor viktig at de metodiske valgene som ligger til grunn for valgt metode er godt begrunnet og gjerne hviler på metodeliteratur. En pakke som gjør det veldig lett er [`simputation`](https://cran.r-project.org/web/packages/simputation/index.html) pakken som har mange forskjellige erstatningsmetoder. Et annet alternativ er [`mice`]() pakken, men den virker ganske kompleks og lite tilgjengelig for meg ved et første øyekast.Det samme gjelder for [`amelia`](https://cran.r-project.org/web/packages/Amelia/index.html) pakken (som nå komtales som Amelia II). Fordelen med både Amelia og Mice pakken er at de gjør "multiple imputation" som vil si at man erstatter missing ved hjelp av en algoritme som erstatter en data på enn sli måte at det ikke endrer noen av de relasjonene som er i datasettet allerede, men erstatter missing på en slik måte at man kan inkludere de radene (personene) som har delvis fullstendig datasett. Honaker og King (2010) har også en relevant artikkel på dette.
+
