@@ -2,19 +2,16 @@
 title: "Nyttige pakker og funksjoner"
 author: "Lars Bauger"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: 
-  html_document: 
+output:
+  html_document:
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
 ---
-```{r setup, include=FALSE}
-# Register an inline hook:
-knitr::knit_hooks$set(inline = function(x) {
-  x <- sprintf("%1.2f", x)
-  paste(x, collapse = ", ")
-})
-```
-```{r}
+
+```{r echo=FALSE}
 library(naniar)
 library(tidyverse)
 ```
@@ -24,7 +21,7 @@ library(tidyverse)
 # Nyttige ressurser for Rmarkdown 
 Som et supplement til David Dalpiaz sin bok [R for statistical Learning](https://daviddalpiaz.github.io/r4sl/index.html) så er det lagt ved en kort youtube [spilleliste](https://www.youtube.com/playlist?list=PLBgxzZMu3GpNgd07DwmS-2odHtMO6MWGH) for basic rmarkdown tips og triks. 
 
-* En tabell generator for å gjøre det enklere å få fine tabeller. Bruk [denne](https://www.tablesgenerator.com/markdown_tables) lenken for å generere tabell. et eksempel på en 5x3 tabell under
+Dersom man skal lage en tabell i markdown er det lurt å benytte seg av enn tabell generator for å gjøre det enklere å få fine tabeller. Bruk [denne](https://www.tablesgenerator.com/markdown_tables) lenken for å generere tabell. et eksempel på en 5x3 tabell under
 
 | Id 	| Alder 	| Kjønn 	| Karakter 	| Fulgt undervisning 	|
 |-	|-	|-	|-	|-	|
@@ -32,7 +29,7 @@ Som et supplement til David Dalpiaz sin bok [R for statistical Learning](https:/
 | 2 	| 22 	| Mann 	| C 	| Elektronisk 	|
 | 3 	| 35 	| Kvinne 	| E 	| Hybrid 	|
 
-For å introdusere en r chunk kan man bruke hurtigtastene `ctrl`+`alt`+ `i`. Under er det et kort seksempl på at jeg har lagd to variabler (vektorer): variabel x har verdiene fra 1-10 og y er har verdiene x ganger 3
+For å introdusere en r chunk kan man bruke hurtigtastene `ctrl`+`alt`+ `i`. Under er det et kort eksempel på at jeg har lagd to variabler (vektorer): variabel x har verdiene fra 1-10 og y er har verdiene x ganger 3
 ```{r}
 x = 1:10
 y = x * 3
@@ -43,10 +40,6 @@ x + y
 hist(y)
 ```
 
-```{r message=FALSE, warning=FALSE}
-z = c(1,1,2,3,5,8)
-z + x
-```
 
 Hvis man ikke vil ha med advarsler eller meldinger så kan man redigere dette i selve r chunken. Dette kan gjøres ved å spesifisere det manuelt i koden, evt. å endre oppsettet på høyre side i selve chunken. man kan også velge å kunne vise output (echo=FALSE) eller å vise koden og output. for å justere figurstørrelsen i dokumentet kan man spesifisere bredden og høyden ved å inkludere i chunken `fig.width = 4`, `fig.height = 2.5``
 
@@ -54,6 +47,7 @@ Hvis man ikke vil ha med advarsler eller meldinger så kan man redigere dette i 
 # Nyttige pakker og funksjoner for å utforske data {#test}
 * [**`visdat`**](https://cran.r-project.org/web/packages/visdat/index.html) er en pakke som er fin for å få oversikt over et helt datasett slik at man kan oppdage eventuelle problemer og mangler ved det. De to vikigste funksjonene er `vis_dat` og `vis_miss`.
   - `vis_dat` visualiserer hele datasettet på en gang og gir informasjon om hva slags type variabel vi har (class) samt hvovidt det er noe som er missing data. under er denne funksjonen brukt på `airquality` datasettet som ligger i r
+  
 ```{r echo=FALSE, fig.width = 4, fig.height = 2.5}
 visdat::vis_dat(airquality)
 ```
@@ -93,7 +87,7 @@ visdat::vis_miss(airquality)
   
 # Tips og triks
 
-* For å velge ut (tilfeldig) en mindre del av dataene i datasettet kan bruke slice funksjonen `slice_sample` i dplyr pakken (en del av tidyverse). For å trekke ut et spesifikt antall tilfeldig antall rader (i eksemplet 30 rader) kan man bruke `slice_sample(n = 30)`. Dersom man ønsker å trekke ut tilfeldig prosent (i eksemplet 1 %) av datasettet kan man bruke `slice_sample(prop = 0.01)`
+* For å velge ut (tilfeldig) en mindre del av dataene i datasettet kan bruke [slice](https://dplyr.tidyverse.org/reference/slice.html) funksjonen `slice_sample` i dplyr pakken (en del av tidyverse). For å trekke ut et spesifikt antall tilfeldig antall rader (i eksemplet 30 rader) kan man bruke `slice_sample(n = 30)`. Dersom man ønsker å trekke ut tilfeldig prosent (i eksemplet 1 %) av datasettet kan man bruke `slice_sample(prop = 0.01)`
 ## Deskriptive statistikk
 
 ## Raske oversikter over datasettet
